@@ -5,6 +5,7 @@ import (
 	"loginServer/helper"
 	"loginServer/models"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -69,16 +70,38 @@ func SignIn(c echo.Context) error {
 
 	res := helper.CheckPasswordHash(user.Password, inputpw)
 
-	var message string
 	// 비밀번호 검증에 실패한 경우
 	if !res {
 		return echo.ErrUnauthorized
-	} else {
-		// 검증에 성공한 경우
-		message = "Success"
 	}
 
+	// 토큰 발행
+	accessToken, err := helper.CreateJWT(user.Email)
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	cookie := new(http.Cookie)
+	cookie.Name = "access-token"
+	cookie.Value = accessToken
+	cookie.HttpOnly = true
+	cookie.Expires = time.Now().Add(time.Hour * 24)
+
+	c.SetCookie(cookie)
+
 	return c.JSON(http.StatusOK, map[string]string{
-		"message": message,
+		"message": "Login Success",
 	})
+}
+
+func MockData() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Mock Data를 생성한다.
+		list := map[string]string{
+			"1": "고양이",
+			"2": "사자",
+			"3": "호랑이",
+		}
+		return c.JSON(http.StatusOK, list)
+	}
 }

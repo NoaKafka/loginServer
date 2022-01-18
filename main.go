@@ -2,8 +2,10 @@ package main
 
 import (
 	"loginServer/handler"
+	"os"
 
 	"github.com/labstack/echo/v4"
+	md "github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -20,6 +22,12 @@ func main() {
 	e.POST("/api/signup", handler.SignUp)
 
 	e.POST("/api/signin", handler.SignIn)
+
+	// 목데이터로 테스트
+	e.GET("/api/getlist", handler.MockData(), md.JWTWithConfig(md.JWTConfig{
+		SigningKey:  []byte(os.Getenv("SECRET_KEY")),
+		TokenLookup: "cookie:access-token",
+	}))
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
