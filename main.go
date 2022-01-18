@@ -22,8 +22,8 @@ func main() {
 
 	e.POST("/api/signin", handler.SignIn)
 
-	// 목데이터로 테스트
-	e.GET("/api/getlist", handler.MockData(), md.JWTWithConfig(md.JWTConfig{
+	// 채팅웹소켓 연결 API
+	e.POST("/api/chat", handler.CallChat, md.JWTWithConfig(md.JWTConfig{
 		SigningKey:  []byte("noakafka"),
 		TokenLookup: "cookie:access-token",
 	}))

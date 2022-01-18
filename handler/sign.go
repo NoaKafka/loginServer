@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"loginServer/chat"
 	"loginServer/db"
 	"loginServer/helper"
 	"loginServer/models"
@@ -94,14 +95,15 @@ func SignIn(c echo.Context) error {
 	})
 }
 
-func MockData() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		// Mock Data를 생성한다.
-		list := map[string]string{
-			"1": "고양이",
-			"2": "사자",
-			"3": "호랑이",
-		}
-		return c.JSON(http.StatusOK, list)
+func CallChat(c echo.Context) error {
+	params := make(map[string]string)
+	if err := c.Bind(&params); err != nil {
+		return err
 	}
+
+	err := chat.Chat(params["email"])
+	if err != nil {
+		return err
+	}
+	return nil
 }
