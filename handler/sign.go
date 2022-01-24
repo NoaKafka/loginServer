@@ -93,11 +93,3 @@ func SignIn(c echo.Context) error {
 		"message": "Login Success",
 	})
 }
-
-func CallChatSocket(c echo.Context) error {
-	//ws 호출
-	//_, err := http.NewRequest("GET", "ws://localhost:8080/ws?id=noakafka", )
-	_, err := http.Get("http://localhost:8080/ws?id=noakafka")
-
-	return err
-}

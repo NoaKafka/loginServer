@@ -27,12 +27,5 @@ func main() {
 
 	e.POST("/api/signin", handler.SignIn)
 
-	e.GET("/", serveHome)
-	// 목데이터로 테스트
-	// e.GET("/api/chat", handler.CallChatSocket, md.JWTWithConfig(md.JWTConfig{
-	// 	SigningKey:  []byte("noakafka"),
-	// 	TokenLookup: "cookie:access-token",
-	// }))
-
 	e.Logger.Fatal(e.Start(":1323"))
 }
