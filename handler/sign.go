@@ -94,14 +94,10 @@ func SignIn(c echo.Context) error {
 	})
 }
 
-func MockData() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		// Mock Data를 생성한다.
-		list := map[string]string{
-			"1": "고양이",
-			"2": "사자",
-			"3": "호랑이",
-		}
-		return c.JSON(http.StatusOK, list)
-	}
+func CallChatSocket(c echo.Context) error {
+	//ws 호출
+	//_, err := http.NewRequest("GET", "ws://localhost:8080/ws?id=noakafka", )
+	_, err := http.Get("http://localhost:8080/ws?id=noakafka")
+
+	return err
 }
